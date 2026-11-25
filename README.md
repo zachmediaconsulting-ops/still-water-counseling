@@ -18,13 +18,12 @@ Option B: Wrangler CLI from this folder:
 
 ## Form email (Resend)
 
-In Cloudflare Pages > Settings > Variables and Secrets (Production) add:
+In Cloudflare Pages > Settings > Variables and Secrets (Production) add the secret below. The recipient (`CONTACT_TO`) and sender (`CONTACT_FROM`) are set in `wrangler.toml` under `[vars]`; Cloudflare ignores dashboard values for them because this project has a wrangler.toml.
 
 | Name | Type | Example |
 |---|---|---|
 | `RESEND_API_KEY` | Secret | `re_...` |
-| `CONTACT_TO` | Text | `info@swmidland.com` (comma-separate for several) |
-| `CONTACT_FROM` | Text | `Still Water Website <website@stillwatercounselingmidland.com>` |
+
 
 The domain in `CONTACT_FROM` must be verified in Resend (Domains > Add domain, then add its DNS records in Cloudflare).
 
