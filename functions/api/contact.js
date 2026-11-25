@@ -13,8 +13,13 @@ const LABELS = {
   phone_number: 'Phone number',
   email: 'Email',
   tell_us_what_table_top_role_playing_games_you_like_to_play: 'Why do you want to join a TTRPG therapy group?',
+  counseling_for: 'Counseling is for',
+  contact_method: 'Best way to reach you',
+  message: 'How can we help?',
 };
-const REQUIRED = ['first', 'last', 'phone_number', 'email'];
+// Every form needs a name; the TTRPG form also requires phone and email (enforced in the page).
+// The inquiry form needs a phone number or an email address.
+const REQUIRED = ['first', 'last'];
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
@@ -40,7 +45,8 @@ export async function onRequestPost({ request, env }) {
   for (const k of REQUIRED) {
     if (!fields[k]) return json({ error: `${LABELS[k] || k} is required.` }, 422);
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) return json({ error: 'Please enter a valid email address.' }, 422);
+  if (!fields.email && !fields.phone_number) return json({ error: 'Please enter a phone number or an email address.' }, 422);
+  if (fields.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) return json({ error: 'Please enter a valid email address.' }, 422);
 
   if (!env.RESEND_API_KEY || !env.CONTACT_TO || !env.CONTACT_FROM) {
     return json({ error: 'The form is not configured yet.' }, 500);
@@ -58,8 +64,8 @@ export async function onRequestPost({ request, env }) {
     body: JSON.stringify({
       from: env.CONTACT_FROM,
       to: env.CONTACT_TO.split(',').map((s) => s.trim()),
-      reply_to: fields.email,
-      subject: `New submission: ${formName} (${fields.first} ${fields.last})`,
+      ...(fields.email ? { reply_to: fields.email } : {}),
+      subject: `New ${formName} submission: ${fields.first} ${fields.last}`,
       html: `<h2>${esc(formName)}</h2><table>${rows}</table>`,
       text,
     }),

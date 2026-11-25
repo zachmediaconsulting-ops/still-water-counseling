@@ -111,11 +111,18 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var btn = form.querySelector('[type=submit]');
+      var one = form.getAttribute('data-need-one');
+      if (one && !one.split(',').some(function (n) { var f = form.elements[n]; return f && f.value.trim(); })) {
+        status.className = 'form-status is-error';
+        status.textContent = 'Please enter a phone number or an email address so we can reach you.';
+        var first = form.elements[one.split(',')[0]]; if (first) first.focus();
+        return;
+      }
       btn.disabled = true;
       status.className = 'form-status';
       status.textContent = 'Sending…';
       fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.error || 'Error'); return j; }); })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var er = new Error(j.error || 'Error'); er.status = r.status; throw er; } return j; }); })
         .then(function () {
           form.reset();
           status.className = 'form-status is-success';
@@ -123,7 +130,7 @@
         })
         .catch(function (err) {
           status.className = 'form-status is-error';
-          status.textContent = (err && err.message && err.message !== 'Error' ? err.message + ' ' : '') +
+          status.textContent = err && err.status === 422 ? err.message :
             'Sorry, your message could not be sent. Please call (989) 832-0191.';
         })
         .then(function () { btn.disabled = false; });
