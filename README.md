@@ -35,3 +35,5 @@ Then add a Cloudflare Redirect Rule: `www.stillwatercounselingmidland.com/*` to 
 ## Files that help search engines and AI
 
 `sitemap.xml`, `robots.txt` (all crawlers allowed), `llms.txt`, and `_redirects` (old WordPress URLs to the home page).
+
+Deploys automatically to Cloudflare Pages (project `still-water-counseling`) on every push to `main`.
