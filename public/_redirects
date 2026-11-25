@@ -1,0 +1,17 @@
+# Old WordPress URLs that were not carried over
+/hello-world/  /  301
+/hello-world  /  301
+/category/uncategorized/  /  301
+/category/*  /  301
+/author/*  /  301
+/feed/  /  301
+/feed  /  301
+/comments/feed/  /  301
+/wp-sitemap.xml  /sitemap.xml  301
+/sitemap_index.xml  /sitemap.xml  301
+/page-sitemap.xml  /sitemap.xml  301
+/post-sitemap.xml  /sitemap.xml  301
+/wp-admin  /  301
+/wp-admin/*  /  301
+/wp-login.php  /  301
+/wp-content/uploads/*  /  301
