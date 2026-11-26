@@ -136,4 +136,51 @@
         .then(function () { btn.disabled = false; });
     });
   });
+
+  /* ---------- Internal pages (reference layouts): counselor bio pop-ups + scroll entrances ---------- */
+  var refMain = document.querySelector('main.ref');
+  if (refMain) {
+    refMain.querySelectorAll('[data-bio]').forEach(function (btn) {
+      var dlg = document.getElementById(btn.getAttribute('data-bio'));
+      if (!dlg || typeof dlg.showModal !== 'function') return;
+      btn.addEventListener('click', function (e) { e.preventDefault(); dlg.showModal(); });
+      dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+      var x = dlg.querySelector('.bio__close'); if (x) x.addEventListener('click', function () { dlg.close(); });
+    });
+    var h = location.hash.slice(1);  // links from the home page counselor cards, e.g. #carol-boothroyd
+    if (h) { var d = document.getElementById('bio-' + h); if (d && d.showModal) d.showModal(); }
+
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var groups = [
+        ['main.ref .band .eyebrow, main.ref .band h2, main.ref .band .lede, main.ref .band .link-arrow', 'sr-text'],
+        ['main.ref .prose > p, main.ref .prose > h2, main.ref .prose > h3, main.ref .prose > ul, main.ref .prose > blockquote, main.ref .prose > .callout, main.ref .prose > .facts, main.ref .prose > .video', 'sr-text'],
+        ['main.ref .cards > *, main.ref .svc-list > *, main.ref .team-grid > *, main.ref .values > *, main.ref .contact-grid > *, main.ref .facts > *, main.ref .gallery > *, main.ref .figure-pair > *, main.ref .aside > *', 'sr-card'],
+        ['main.ref .cta-band__inner > *', 'sr-text'],
+        ['main.ref .page-hero__inner > *', 'sr-text']
+      ];
+      var els = [];
+      groups.forEach(function (g) {
+        document.querySelectorAll(g[0]).forEach(function (el) {
+          if (el.closest('dialog') || el.classList.contains('sr')) return;
+          el.classList.add('sr', g[1]); els.push(el);
+        });
+      });
+      els.forEach(function (el) {
+        if (!el.classList.contains('sr-card') && !el.closest('.page-hero__inner') && el.tagName !== 'LI') return;
+        var sibs = Array.prototype.filter.call(el.parentElement.children, function (c) { return c.classList.contains('sr'); });
+        el.style.transitionDelay = Math.min(sibs.indexOf(el), 6) * 110 + 'ms';
+      });
+      var vh = window.innerHeight;
+      var srio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('sr-in'); srio.unobserve(en.target); } });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+      els.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < vh * 0.92 && r.bottom > 0) el.classList.add('sr-in', 'sr-instant'); else srio.observe(el);
+      });
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        document.querySelectorAll('.sr-instant').forEach(function (el) { el.classList.remove('sr-instant'); });
+      }); });
+    }
+  }
 })();
