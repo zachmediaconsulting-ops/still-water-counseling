@@ -721,3 +721,5 @@ a.sw-textlink:hover,a.sw-textlink:focus{text-decoration:underline}
 .ref .aside__card p[style]{font-family:var(--f-body)!important;font-weight:700}
 .ref .why:not(:has(.why__media)){grid-template-columns:1fr}
 .ref .why:not(:has(.why__media)) .why__text{max-width:760px}
+.ref .intro:not(:has(.intro__photo)){grid-template-columns:1fr}
+.ref .intro:not(:has(.intro__photo))>.prose{max-width:760px}
