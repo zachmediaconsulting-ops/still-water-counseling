@@ -12,12 +12,11 @@ const LABELS = {
   last: 'Last name',
   phone_number: 'Phone number',
   email: 'Email',
-  tell_us_what_table_top_role_playing_games_you_like_to_play: 'Why do you want to join a TTRPG therapy group?',
   counseling_for: 'Counseling is for',
   contact_method: 'Best way to reach you',
   message: 'How can we help?',
 };
-// Every form needs a name; the TTRPG form also requires phone and email (enforced in the page).
+// Every form needs a name.
 // The inquiry form needs a phone number or an email address.
 const REQUIRED = ['first', 'last'];
 

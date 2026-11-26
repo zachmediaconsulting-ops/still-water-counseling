@@ -15,3 +15,6 @@
 /wp-admin/*  /  301
 /wp-login.php  /  301
 /wp-content/uploads/*  /  301
+# Discontinued: TTRPG / Geek Groups page
+/therapeutic-tabletop-role-playing-game-ttrpg/  /sexual-addiction-group-therapy-midland-mi-48640/  301
+/therapeutic-tabletop-role-playing-game-ttrpg  /sexual-addiction-group-therapy-midland-mi-48640/  301
